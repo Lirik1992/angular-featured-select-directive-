@@ -1,0 +1,84 @@
+<div class="multiselect-parent dropdown-multiselect" ng-class="{open: open}">
+  <div class="dropdown-toggle form-control" style="width: inherit" ng-transclude="toggleDropdown" ng-click="toggleDropdown()">
+    <span class="non-selectable">{{getButtonText()}}
+      <i ng-if="!open" class="fa fa-angle-down pull-right"></i>
+      <i ng-if="open" class="fa fa-angle-up pull-right"></i>
+    </span>
+  </div>
+
+  <ul class="dropdown-menu"
+      ng-if="open"
+      ng-style="{display: open ? 'block' : 'none', height : settings.scrollable ? settings.scrollableHeight : 'auto'}">
+
+    <!-- Search element START -->
+    <li ng-if="settings.enableSearch">
+      <div class="dropdown-header search-field">
+        <input type="text" class="form-control searchField multiselect-search" ng-keydown="keyDownSearchDefault($event); keyDownSearch($event, input.searchFilter);"
+          ng-style="{ width: '100%' }" ng-model="input.searchFilter" placeholder="{{texts.searchPlaceholder}}" />
+      </div>
+    </li>
+
+    <li ng-if="settings.enableSearch" class="divider"></li>
+    <!-- Search element END -->
+
+    <!-- Select Options START -->
+    <div class="dropdown-menu-content" vs-repeat="{latch:true}">
+      <!-- <li ng-repeat="currentGroup in settings.selectByGroups track by $index" ng-click="selectCurrentGroup(currentGroup)">
+        <a class="active" ng-class="{'dropdown-selected-group': selectedGroup === currentGroup}" tabindex="-1">
+          {{::texts.selectGroup}} {{::getGroupLabel(currentGroup)}}
+        </a>
+      </li>
+  
+      <li ng-if="settings.groupBy" ng-repeat-start="option in orderedItems = ( options | filter:getFilter(input.searchFilter) | orderBy:'':false:orderFunction)"
+        ng-show="getPropertyForObject(option, settings.groupBy) !== getPropertyForObject(orderedItems[$index - 1], settings.groupBy)"
+        role="presentation" class="dropdown-header">
+        {{ getGroupLabel(getPropertyForObject(option, settings.groupBy)) }}
+      </li>
+
+      <li ng-if="settings.groupBy" ng-class="{'active': isChecked(option) && settings.styleActive}" ng-repeat-end role="presentation">
+        <a ng-keydown="option.disabled || keyDownLink($event)" role="menuitem" class="option" tabindex="-1" ng-click="option.disabled || setSelectedItem(option, false, true)"
+          ng-disabled="option.disabled">
+          <div ng-if="settings.checkBoxes" class="checkbox optional-checkbox">
+            <label>
+              <input class="checkboxInput" type="checkbox" ng-click="checkboxClick($event, option)" ng-checked="isChecked(option)" />
+              <span dm-dropdown-static-include="{{settings.template}}"></span>
+            </label>
+          </div>
+          <span dm-dropdown-static-include="{{settings.template}}"></span>
+        </a>
+      </li> -->
+
+      <li ng-if="!settings.groupBy" ng-class="{'active': isChecked(option) && settings.styleActive}" role="presentation" ng-repeat="option in options | filter:getFilter(input.searchFilter) | limitTo:settings.limit | orderBy:'':false:orderFunction">
+        <a ng-keydown="option.disabled || keyDownLink($event)" role="menuitem" class="option" tabindex="-1" ng-click="option.disabled || setSelectedItem(option, false, true)"
+          ng-disabled="option.disabled">
+          <div ng-if="settings.checkBoxes" class="checkbox optional-checkbox">
+            <label>
+              <input ng-disabled="option.disabled" class="checkboxInput" type="checkbox" ng-click="checkboxClick($event, option)" ng-checked="isChecked(option)" />
+              <span dm-dropdown-static-include="{{settings.template}}"></span>
+            </label>
+          </div>
+          <span ng-if="!settings.checkBoxes" dm-dropdown-static-include="{{settings.template}}"></span>
+        </a>
+      </li>
+
+      <li role="presentation" ng-show="settings.selectionLimit > 1">
+        <a role="menuitem">{{selectedModel.length}} {{texts.selectionOf}} {{settings.selectionLimit}} {{texts.selectionCount}}</a>
+      </li>
+    </div>
+    <!-- Select Options END -->
+
+    <!-- Select controls START -->
+    <li class="divider" ng-if="settings.showCheckAll && settings.showUncheckAll && settings.selectionLimit === 0"></li>
+    <li class="col-xs-6 select-all" ng-if="settings.showCheckAll && settings.selectionLimit === 0">
+      <a ng-keydown="keyDownLink($event)" data-ng-click="selectAll()" tabindex="-1">
+        {{texts.checkAll}}
+      </a>
+    </li>
+    <li class="col-xs-6 deselect-all" ng-if="settings.showUncheckAll && settings.selectionLimit === 0">
+      <a ng-keydown="keyDownLink($event)" data-ng-click="deselectAll();" tabindex="-1">
+        {{texts.uncheckAll}}
+      </a>
+    </li>
+    <!-- Select controls END -->
+  </ul>
+</div>
